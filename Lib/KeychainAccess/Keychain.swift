@@ -672,6 +672,12 @@ public final class Keychain {
     public func set(_ value: Data, key: String, ignoringAttributeSynchronizable: Bool = true) throws {
         var query = options.query(ignoringAttributeSynchronizable: ignoringAttributeSynchronizable)
         query[AttributeAccount] = key
+        if #available(iOSApplicationExtension 10.0, *) {
+            query[AttributeECSECPrimeRandom] = kSecAttrKeyTypeECSECPrimeRandom
+        }
+        
+        query[AttributeSecureEnclave] = kSecAttrTokenIDSecureEnclave
+        
         #if os(iOS)
         if #available(iOS 9.0, *) {
             if let authenticationUI = options.authenticationUI {
@@ -1255,6 +1261,10 @@ private let AttributeProtocol = String(kSecAttrProtocol)
 private let AttributeAuthenticationType = String(kSecAttrAuthenticationType)
 private let AttributePort = String(kSecAttrPort)
 private let AttributePath = String(kSecAttrPath)
+@available(iOSApplicationExtension 10.0, *)
+private let AttributeECSECPrimeRandom = String(kSecAttrKeyTypeECSECPrimeRandom)
+
+private let AttributeSecureEnclave = String(kSecAttrTokenIDSecureEnclave)
 
 private let SynchronizableAny = kSecAttrSynchronizableAny
 
